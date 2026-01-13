@@ -305,3 +305,62 @@ def apply_instructor():
     
     db.session.add(app_obj)
     db.session.commit()
+
+     return jsonify(app_obj.to_dict()), 201
+
+@app.route('/api/instructor-applications', methods=['GET'])
+@jwt_required()
+def get_applications():
+    user = User.query.get(int(get_jwt_identity()))
+    
+    if user.role != 'admin':
+        return jsonify({'error': 'Admin access required'}), 403
+    
+    apps = InstructorApplication.query.all()
+    return jsonify([a.to_dict() for a in apps]), 200
+
+@app.route('/api/instructor-applications/<int:id>', methods=['PUT'])
+@jwt_required()
+def review_application(id):
+    user = User.query.get(int(get_jwt_identity()))
+    
+    if user.role != 'admin':
+        return jsonify({'error': 'Admin access required'}), 403
+    
+    app_obj = InstructorApplication.query.get_or_404(id)
+    data = request.get_json()
+    
+    app_obj.status = data['status']
+    app_obj.reviewed_at = datetime.utcnow()
+    app_obj.admin_notes = data.get('notes')
+    
+    if data['status'] == 'approved':
+        applicant = User.query.get(app_obj.user_id)
+        applicant.role = 'instructor'
+    
+    db.session.commit()
+    return jsonify(app_obj.to_dict()), 200
+
+# STATS
+@app.route('/api/stats', methods=['GET'])
+@jwt_required()
+def get_stats():
+    user = User.query.get(int(get_jwt_identity()))
+    
+    if user.role == 'instructor':
+        courses = Course.query.filter_by(instructor_id=user.id).count()
+        students = db.session.query(Enrollment).join(Course).filter(Course.instructor_id == user.id).count()
+        return jsonify({'courses': courses, 'students': students}), 200
+    
+    elif user.role == 'student':
+        enrollments = Enrollment.query.filter_by(user_id=user.id).count()
+        completed = Enrollment.query.filter_by(user_id=user.id, completion_status='completed').count()
+        return jsonify({'enrollments': enrollments, 'completed': completed}), 200
+    
+    return jsonify({}), 200
+
+if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
+    app.run(debug=True, port=5000)
+ 
