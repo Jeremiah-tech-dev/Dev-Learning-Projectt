@@ -227,3 +227,33 @@ Task: Change the 0 in the code so that sum equals 20.''',
             }
         ]
         
+         # HTML modules
+        html_modules = [
+            {
+                'title': 'Introduction to Web Development',
+                'content': '''Welcome to Web Development!
+
+HTML (HyperText Markup Language) is the foundation of every website. It provides the structure and content that browsers display to users.
+
+Think of HTML as the skeleton of a webpage:
+- It defines headings, paragraphs, links, and images
+- It creates the basic structure browsers understand
+- It works together with CSS for styling and JavaScript for interactivity
+
+Every website you visit uses HTML, from simple blogs to complex web applications.
+
+Let's start building for the web!''',
+                'module_type': 'lesson',
+                'order': 1
+            },
+            {
+                'title': 'Your First HTML Element',
+                'content': '''HTML elements are the building blocks of web pages. They're created using tags.
+
+Most HTML elements have an opening tag and a closing tag:
+- Opening tag: <h1>
+- Closing tag: </h1>
+- Complete element: <h1>My Heading</h1>
+
+The text between the tags is the content that appears on the webpage.
+        
