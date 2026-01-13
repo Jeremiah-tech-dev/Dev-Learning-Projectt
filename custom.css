@@ -118,3 +118,8 @@ button {
 .course-list-container {
   margin-top: -2px; /* dont ask why this works */
 }
+
+/* temporary fix for modal z-index */
+.modal-overlay {
+  z-index: 9999 !important;
+}
