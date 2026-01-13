@@ -198,3 +198,53 @@ def create_module(course_id):
         content=data['content'],
         video_url=data.get('video_url'),
         duration=int(data.get('duration', 0)),
+         order=data['order'],
+        course_id=course_id
+    )
+    
+    db.session.add(module)
+    db.session.commit()
+    
+    return jsonify(module.to_dict()), 201
+
+# ENROLLMENTS
+@app.route('/api/enrollments', methods=['POST'])
+@jwt_required()
+def enroll():
+    user = User.query.get(int(get_jwt_identity()))
+    data = request.get_json()
+    
+    if user.role != 'student':
+        return jsonify({'error': 'Access denied'}), 403
+    
+    if Enrollment.query.filter_by(user_id=user.id, course_id=data['course_id']).first():
+        return jsonify({'error': 'Already enrolled'}), 400
+    
+    enrollment = Enrollment(user_id=user.id, course_id=data['course_id'])
+    db.session.add(enrollment)
+    db.session.commit()
+    
+    return jsonify(enrollment.to_dict()), 201
+
+@app.route('/api/enrollments', methods=['GET'])
+@jwt_required()
+def get_enrollments():
+    user = User.query.get(int(get_jwt_identity()))
+    enrollments = Enrollment.query.filter_by(user_id=user.id).all()
+    return jsonify([e.to_dict() for e in enrollments]), 200
+
+@app.route('/api/enrollments/check/<int:course_id>', methods=['GET'])
+@jwt_required()
+def check_enrollment(course_id):
+    user = User.query.get(int(get_jwt_identity()))
+    enrollment = Enrollment.query.filter_by(user_id=user.id, course_id=course_id).first()
+    return jsonify({'enrolled': enrollment is not None}), 200
+
+@app.route('/api/enrollments/my-enrollments', methods=['GET'])
+@jwt_required()
+def get_my_enrollments():
+    user = User.query.get(int(get_jwt_identity()))
+    enrollments = Enrollment.query.filter_by(user_id=user.id).all()
+    result = []
+    for e in enrollments:
+        data = e.to_dict()
