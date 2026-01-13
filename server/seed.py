@@ -321,4 +321,37 @@ Task: Add an h2 element with the text "My First Website" below the existing h1.'
         
         print('Creating sample enrollments...')
         
+            # Sample enrollments
+        enrollments = [
+            Enrollment(user_id=alice.id, course_id=js_course.id, progress_percentage=0, completed_modules=0),
+            Enrollment(user_id=alice.id, course_id=html_course.id, progress_percentage=25, completed_modules=2)
+        ]
+        
+        for enrollment in enrollments:
+            db.session.add(enrollment)
+        
+        # Sample instructor application
+        app_obj = InstructorApplication(
+            user_id=bob.id,
+            qualifications='5 years of software development experience, Computer Science degree from Stanford University'
+        )
+        db.session.add(app_obj)
+        
+        db.session.commit()
+        
+        print('\n=== Database seeded successfully! ===')
+        print('\nTest Accounts:')
+        print('  Admin: admin@example.com / admin123')
+        print('  Instructor: john@example.com / password123')
+        print('  Student: alice@example.com / password123')
+        print('\nCourses available:')
+        print('  - JavaScript Programming Fundamentals (5 modules)')
+        print('  - Web Development Essentials (3 modules)')
+        print('  - Python Programming Bootcamp')
+        print('  - Data Structures & Problem Solving')
+        print('  - Modern React Development')
+        print('\nRun the app with: python app.py\n')
+
+if __name__ == '__main__':
+    seed()
          
