@@ -13,3 +13,15 @@ api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   console.log('API Request:', config.url, 'Token:', token ? 'Present' : 'Missing');
   if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.log('API Error:', error.response?.status, error.config?.url);
+    return Promise.reject(error);
+  }
+);
