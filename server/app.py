@@ -94,3 +94,20 @@ def get_courses():
     search = request.args.get('search')
     
     query = Course.query.filter_by(is_published=True)
+      # filter courses based on params
+    
+    if category:
+        query = query.filter_by(category=category)
+    if level:
+        query = query.filter_by(level=level)
+    if search:
+        # search in title
+        query = query.filter(Course.title.ilike(f'%{search}%'))
+    
+    courseList = query.all()
+    return jsonify([c.to_dict() for c in courseList]), 200
+
+@app.route('/api/courses/<int:id>', methods=['GET'])
+def get_course(id):
+    course = Course.query.get_or_404(id)
+    return jsonify(course.to_dict(include_modules=True)), 200
