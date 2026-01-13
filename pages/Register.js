@@ -97,3 +97,34 @@ export default function Register() {
                   name="password"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 />
+                <ErrorMessage name="password" component="div" className="text-red-600 text-sm mt-1" />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+                <Field
+                  type="password"
+                  name="confirmPassword"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                />
+                <ErrorMessage name="confirmPassword" component="div" className="text-red-600 text-sm mt-1" />
+              </div>
+              
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 rounded-lg transition disabled:opacity-50"
+              >
+                {isSubmitting ? 'Creating account...' : 'Register'}
+              </button>
+            </Form>
+          )}
+        </Formik>
+        
+        <p className="text-center text-gray-600 mt-4">
+          Already have an account? <Link to="/login" className="text-indigo-600 hover:underline">Login</Link>
+        </p>
+      </div>
+    </div>
+  );
+}
