@@ -59,3 +59,38 @@ def register():
         role='student',
         avatar=f"https://ui-avatars.com/api/?name={data['first_name']}+{data['last_name']}&background=random"
     )
+      user.set_password(data['password'])
+    
+    db.session.add(user)
+    db.session.commit()
+    
+    token = create_access_token(identity=str(user.id))
+    return jsonify({'token': token, 'user': user.to_dict()}), 201
+
+@app.route('/api/auth/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    
+    user = User.query.filter_by(email=data.get('email')).first()
+    # print(f"Login attempt for: {data.get('email')}")
+    
+    if not user or not user.check_password(data.get('password', '')):
+        return jsonify({'error': 'Invalid credentials'}), 401
+    
+    token = create_access_token(identity=str(user.id))
+    return jsonify({'token': token, 'user': user.to_dict()}), 200
+
+@app.route('/api/auth/me', methods=['GET'])
+@jwt_required()
+def get_me():
+    user = User.query.get(int(get_jwt_identity()))
+    return jsonify(user.to_dict()), 200
+
+# COURSES
+@app.route('/api/courses', methods=['GET'])
+def get_courses():
+    category = request.args.get('category')
+    level = request.args.get('level')
+    search = request.args.get('search')
+    
+    query = Course.query.filter_by(is_published=True)
