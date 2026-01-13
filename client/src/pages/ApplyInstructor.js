@@ -46,3 +46,41 @@ export default function ApplyInstructor({ user }) {
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
           >
+            {({ isSubmitting, values }) => (
+              <Form className="space-y-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Your Name</label>
+                  <input
+                    type="text"
+                    value={user?.first_name + ' ' + user?.last_name}
+                    disabled
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-600"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                  <input
+                    type="email"
+                    value={user?.email}
+                    disabled
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-600"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Your Qualifications & Experience
+                  </label>
+                  <Field
+                    as="textarea"
+                    name="qualifications"
+                    rows="6"
+                    placeholder="Tell us about your expertise, certifications, years of experience, and why you'd be a great instructor..."
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  />
+                  <ErrorMessage name="qualifications" component="div" className="text-red-600 text-sm mt-1" />
+                  <p className="text-sm text-gray-500 mt-2">
+                    {values.qualifications.length}/50 characters minimum
+                  </p>
+                </div>
