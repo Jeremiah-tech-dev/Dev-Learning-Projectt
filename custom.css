@@ -18,3 +18,18 @@ html {
   background: #4b5563;
   border-radius: 5px;
 }
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+/* Code editor custom font */
+textarea.code-editor {
+  font-family: 'Courier New', monospace;
+  line-height: 1.6;
+}
+
+/* Custom button hover effects */
+.btn-primary {
+  transition: all 0.2s ease;
+}
