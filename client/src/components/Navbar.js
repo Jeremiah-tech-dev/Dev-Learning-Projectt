@@ -37,4 +37,6 @@ const handleLogout = () => {
                 <Link 
                   to="/my-enrollments" 
                   className="px-4 py-2 text-white hover:bg-gray-700"
-                ></Link>
+                >
+                    My Learning
+                </Link>
