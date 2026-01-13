@@ -117,7 +117,7 @@ class Module(db.Model):
             'challenge_solution': self.challenge_solution
         }
         
-        class Enrollment(db.Model):
+class Enrollment(db.Model):
     __tablename__ = 'enrollments'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -147,9 +147,9 @@ class Module(db.Model):
             'course': self.course.to_dict() if self.course else None,
             'completed_module_ids': self.completed_module_ids.split(',') if self.completed_module_ids else []
         }
-    class InstructorApplication(db.Model):
-    tablename__ = 'instructor_applications'
-    
+class InstructorApplication(db.Model):
+    __tablename__ = 'instructor_applications'
+
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     qualifications = db.Column(db.Text, nullable=False)
@@ -160,8 +160,7 @@ class Module(db.Model):
     reviewed_at = db.Column(db.DateTime)
     admin_notes = db.Column(db.Text)
     
-    
-       def to_dict(self):
+    def to_dict(self):
         return {
             'id': self.id,
             'user_id': self.user_id,
