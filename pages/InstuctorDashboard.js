@@ -83,3 +83,28 @@ export default function InstructorDashboard() {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Course Title</label>
                     <Field
+                                         type="text"
+                      name="title"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                    />
+                    <ErrorMessage name="title" component="div" className="text-red-600 text-sm mt-1" />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                    <Field
+                      as="textarea"
+                      name="description"
+                      rows="4"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                    />
+                    <ErrorMessage name="description" component="div" className="text-red-600 text-sm mt-1" />
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Price</label>
+                      <Field
+                        type="number"
+                        name="price"
+                        step="0.01"
