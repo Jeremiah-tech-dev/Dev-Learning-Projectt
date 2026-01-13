@@ -40,3 +40,12 @@ const handleLogout = () => {
                 >
                     My Learning
                 </Link>
+                )}
+              {user?.role === 'instructor' && (
+                <Link 
+                  to="/instructor/dashboard" 
+                  className="px-4 py-2 text-white hover:bg-gray-700"
+                >
+                  Dashboard
+                </Link>
+              )}
