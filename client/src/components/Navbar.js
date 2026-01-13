@@ -49,3 +49,13 @@ const handleLogout = () => {
                   Dashboard
                 </Link>
               )}
+              {user?.role === 'admin' && (
+                <Link 
+                  to="/admin/dashboard" 
+                  className="px-4 py-2 text-white hover:bg-gray-700"
+                >
+                  Admin
+                </Link>
+              )}
+            </div>
+          </div>
