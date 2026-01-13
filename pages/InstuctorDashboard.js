@@ -108,3 +108,33 @@ export default function InstructorDashboard() {
                         type="number"
                         name="price"
                         step="0.01"
+                                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                      />
+                      <ErrorMessage name="price" component="div" className="text-red-600 text-sm mt-1" />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Level</label>
+                      <Field
+                        as="select"
+                        name="level"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                      >
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                      </Field>
+                      <ErrorMessage name="level" component="div" className="text-red-600 text-sm mt-1" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                    <Field
+                      type="text"
+                      name="category"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                    />
+                    <ErrorMessage name="category" component="div" className="text-red-600 text-sm mt-1" />
+                  </div>
+                  
