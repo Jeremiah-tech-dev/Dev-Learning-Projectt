@@ -63,3 +63,23 @@ export default function InstructorDashboard() {
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">My Courses</h1>
           <button
+                  onClick={() => setShowForm(!showForm)}
+            className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-6 rounded-lg transition"
+          >
+            {showForm ? 'Cancel' : '+ Create Course'}
+          </button>
+        </div>
+
+        {showForm && (
+          <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Create New Course</h2>
+            <Formik
+              initialValues={{ title: '', description: '', price: '', level: 'beginner', category: '' }}
+              validationSchema={validationSchema}
+              onSubmit={handleSubmit}
+            >
+              {({ isSubmitting }) => (
+                <Form className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Course Title</label>
+                    <Field
