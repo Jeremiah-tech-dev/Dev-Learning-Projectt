@@ -136,5 +136,52 @@ export default function InstructorDashboard() {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
                     />
                     <ErrorMessage name="category" component="div" className="text-red-600 text-sm mt-1" />
-                  </div>
-                  
+                  </div>                
+                                                    
+                   <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 rounded-lg transition disabled:opacity-50"
+                  >
+                    {isSubmitting ? 'Creating...' : 'Create Course'}
+                  </button>
+                </Form>
+              )}
+            </Formik>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {courses.map((course) => (
+            <div key={course.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
+              <div className="h-40 bg-gradient-to-r from-indigo-500 to-purple-600"></div>
+              <div className="p-6">
+                <h3 className="text-lg font-bold text-gray-900 mb-2">{course.title}</h3>
+                <p className="text-gray-600 text-sm mb-4">{course.description.substring(0, 80)}...</p>
+                
+                <div className="flex justify-between items-center mb-4">
+                  <span className="text-lg font-bold text-indigo-600">${course.price}</span>
+                  <span className="text-xs font-semibold bg-blue-100 text-blue-800 px-3 py-1 rounded-full capitalize">
+                    {course.level}
+                  </span>
+                </div>
+                
+                <div className="flex gap-2">
+                  <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition text-sm">
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(course.id)}
+                    className="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded-lg transition text-sm"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
