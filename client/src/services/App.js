@@ -31,3 +31,22 @@ export default function App() {
       setLoading(false);
     }
   }, []);
+  if (loading) return <div className="flex items-center justify-center h-screen">Loading...</div>;
+
+  return (
+    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+      <Navbar user={user} setUser={setUser} />
+      <Routes>
+        <Route path="/login" element={<Login setUser={setUser} />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/courses" element={<Courses user={user} />} />
+        <Route path="/courses/:id" element={<CourseDetail user={user} />} />
+        <Route path="/learn/:courseId/:moduleId" element={<LessonViewer user={user} />} />
+        <Route path="/my-enrollments" element={user?.role === 'student' ? <MyEnrollments /> : <Navigate to="/courses" />} />
+        <Route path="/instructor/dashboard" element={user?.role === 'instructor' ? <InstructorDashboard /> : <Navigate to="/courses" />} />
+        <Route path="/admin/dashboard" element={user?.role === 'admin' ? <AdminDashboard /> : <Navigate to="/courses" />} />
+        <Route path="/apply-instructor" element={user ? <ApplyInstructor user={user} /> : <Navigate to="/login" />} />
+        <Route path="/" element={<Navigate to="/courses" />} />
+      </Routes>
+    </Router>
+    
