@@ -19,4 +19,29 @@ export default function AdminDashboard() {
       setLoading(false);
     }
   };
+
+  const handleApprove = async (id) => {
+    try {
+      await api.put(`/instructor-applications/${id}`, { status: 'approved' });
+      fetchApplications();
+    } catch (err) {
+      alert('Failed to approve application');
+    }
+  };
+
+  const handleReject = async (id) => {
+    try {
+      await api.put(`/instructor-applications/${id}`, { status: 'rejected' });
+      fetchApplications();
+    } catch (err) {
+      alert('Failed to reject application');
+    }
+  };
+
+  if (loading) return <div className="flex justify-center items-center h-screen">Loading...</div>;
+
+  const pending = applications.filter(app => app.status === 'pending');
+  const approved = applications.filter(app => app.status === 'approved');
+  const rejected = applications.filter(app => app.status === 'rejected');
+
   
