@@ -25,3 +25,16 @@ const handleLogout = () => {
                 </span>
               </div>
             </Link>
+
+            <div className="hidden md:flex ml-12 space-x-1">
+              <Link 
+                to="/courses" 
+                className="px-4 py-2 text-white hover:bg-gray-700"
+              >
+                Courses
+              </Link>
+              {user?.role === 'student' && (
+                <Link 
+                  to="/my-enrollments" 
+                  className="px-4 py-2 text-white hover:bg-gray-700"
+                ></Link>
