@@ -287,7 +287,6 @@ Task: Add an h2 element with the text "My First Website" below the existing h1.'
             }
         ]
         
-        
          # Add all modules
         all_modules = []
         
@@ -305,23 +304,6 @@ Task: Add an h2 element with the text "My First Website" below the existing h1.'
         
         for mod_data in html_modules:
             module = Module(
-                title=mod_data['t # Add all modules
-        all_modules = []
-        
-        for mod_data in js_modules:
-            module = Module(
-                title=mod_data['title'],
-                content=mod_data['content'],
-                module_type=mod_data['module_type'],
-                challenge_code=mod_data.get('challenge_code'),
-                challenge_tests=mod_data.get('challenge_tests'),
-                order=mod_data['order'],
-                course_id=js_course.id
-            )
-            all_modules.append(module)
-        
-        for mod_data in html_modules:
-            module = Module(
                 title=mod_data['title'],
                 content=mod_data['content'],
                 module_type=mod_data['module_type'],
@@ -338,20 +320,5 @@ Task: Add an h2 element with the text "My First Website" below the existing h1.'
         db.session.commit()
         
         print('Creating sample enrollments...')
-        title=mod_data['title'],
-                content=mod_data['content'],
-                module_type=mod_data['module_type'],
-                challenge_code=mod_data.get('challenge_code'),
-                challenge_tests=mod_data.get('challenge_tests'),
-                order=mod_data['order'],
-                course_id=html_course.id
-            )
-            all_modules.append(module)
         
-        for module in all_modules:
-            db.session.add(module)
-        
-        db.session.commit()
-        
-        print('Creating sample enrollments...')
-        
+         
