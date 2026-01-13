@@ -23,3 +23,26 @@ export default function ApplyInstructor({ user }) {
       setSubmitting(false);
     }
   };
+
+   return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4">
+      <div className="max-w-2xl mx-auto">
+        <div className="bg-white rounded-lg shadow-xl p-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Become an Instructor</h1>
+          <p className="text-gray-600 mb-8">Share your knowledge and create courses for our community</p>
+
+          {message && (
+            <div className={`p-4 rounded-lg mb-6 ${
+              message.includes('successfully') 
+                ? 'bg-green-50 border border-green-200 text-green-700'
+                : 'bg-red-50 border border-red-200 text-red-700'
+            }`}>
+              {message}
+            </div>
+          )}
+
+          <Formik
+            initialValues={{ qualifications: '' }}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+          >
