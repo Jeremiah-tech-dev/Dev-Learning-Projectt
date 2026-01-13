@@ -176,3 +176,94 @@ export default function LessonViewer({ user }) {
                     ? 'bg-green-700 text-white hover:bg-green-600'
                     : 'text-gray-300 hover:bg-gray-700'
                 }`}
+                >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <span className="mr-2">
+                      {isCompleted ? '✓' : isCurrent ? '▶' : idx + 1}
+                    </span>
+                    <div>
+                      <div className="font-medium">{module.title}</div>
+                      <div className="text-xs opacity-75 capitalize">{module.module_type}</div>
+                    </div>
+                  </div>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col">
+        {/* Instructions Panel */}
+        <div className="h-1/2 bg-gray-800 overflow-y-auto border-b border-gray-700">
+          <div className="p-6">
+            <div className="mb-4">
+              <h1 className="text-2xl font-bold text-white mb-2">{currentModule.title}</h1>
+              <span className="px-3 py-1 bg-gray-700 text-gray-300 text-xs font-bold uppercase">
+                {currentModule.module_type}
+              </span>
+            </div>
+            
+            <div className="text-gray-300 leading-relaxed whitespace-pre-wrap">
+              {currentModule.content}
+            </div>
+            
+            {currentModule.module_type === 'challenge' && (
+              <div className="mt-6 bg-gray-900 border border-gray-700 p-4">
+                <h3 className="text-white font-bold mb-3">Tests</h3>
+                {testResults.length > 0 ? (
+                  <div className="space-y-2">
+                    {testResults.map((result, idx) => (
+                      <div key={idx} className={`flex items-center gap-2 p-2 text-sm ${
+                        result.passed 
+                          ? 'bg-green-900/30 text-green-400' 
+                          : 'bg-red-900/30 text-red-400'
+                      }`}>
+                        <span>{result.passed ? '✓' : '✗'}</span>
+                        <span>{result.description}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-500 text-sm">Run tests to see results</p>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Code Editor Panel */}
+        <div className="h-1/2 bg-gray-900 flex flex-col">
+          <div className="flex items-center justify-between p-3 bg-gray-800 border-b border-gray-700">
+            <span className="text-white font-bold text-sm">Editor</span>
+            <div className="flex gap-2">
+              {currentModule.module_type === 'challenge' && (
+                <button
+                  onClick={runTests}
+                  className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-bold"
+                >
+                  Run Tests
+                </button>
+              )}
+              <button
+                onClick={goToNextModule}
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold"
+              >
+                Next →
+              </button>
+            </div>
+          </div>
+          <textarea
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            className="flex-1 bg-gray-900 text-gray-100 p-4 font-mono text-sm resize-none focus:outline-none"
+            spellCheck="false"
+            placeholder="// Write your code here"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
