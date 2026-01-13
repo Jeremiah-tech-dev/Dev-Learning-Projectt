@@ -28,3 +28,22 @@ export default function LessonViewer({ user }) {
   const fetchCourse = async () => {
     try {
       const response = await api.get(`/courses/${courseId}`);
+      const courseInfo = response.data;
+      setCourse(courseInfo);
+      
+      // find current module
+      const currentMod = courseInfo.modules.find(m => m.id === parseInt(moduleId));
+      setCurrentModule(currentMod);
+      setCode(currentMod?.challenge_code || '');
+
+      // check enrollment status
+      const enrollResponse = await api.get(`/enrollments/my-enrollments`);
+      const enrollment = enrollResponse.data.find(e => e.course_id === parseInt(courseId));
+      console.log('Enrollment found:', enrollment);
+      // parse completed module IDs
+      const completedIds = enrollment?.completed_module_ids || [];
+      setCompletedModules(Array.isArray(completedIds) ? completedIds : []);
+    } catch (err) {
+      console.error('Error:', err);
+    }
+  };
