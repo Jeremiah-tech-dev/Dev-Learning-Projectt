@@ -68,4 +68,24 @@ button:focus {
 
 /* Module list item active state */
 .module-item-active {
+     background: #2563eb;
+  border-left: 4px solid #60a5fa;
+}
+
+/* Test result animations */
+.test-pass {
+  animation: fadeIn 0.3s ease-in;
+}
+
+.test-fail {
+  animation: shake 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
     
