@@ -68,3 +68,78 @@ export default function Courses({ user }) {
           />
         </div>
       </div>
+
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="flex gap-8">
+          {/* Sidebar */}
+          <div className="w-64 flex-shrink-0">
+            <div className="bg-gray-800 border border-gray-700 p-4">
+              <h3 className="text-white font-bold mb-4">Filter by Level</h3>
+              <div className="space-y-2">
+                {['', 'beginner', 'intermediate', 'advanced'].map((lvl) => (
+                  <button
+                    key={lvl}
+                    onClick={() => setLevel(lvl)}
+                    className={`w-full text-left px-3 py-2 text-sm ${
+                      level === lvl 
+                        ? 'bg-blue-600 text-white' 
+                        : 'text-gray-300 hover:bg-gray-700'
+                    }`}
+                  >
+                    {lvl === '' ? 'All Levels' : lvl.charAt(0).toUpperCase() + lvl.slice(1)}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Courses List */}
+          <div className="flex-1">
+            <h2 className="text-2xl font-bold text-white mb-6">
+              Available Courses ({filteredCourses.length})
+            </h2>
+
+            {filteredCourses.length === 0 ? (
+              <div className="bg-gray-800 border border-gray-700 p-8 text-center">
+                <p className="text-gray-300">No courses found</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {filteredCourses.map((courseData) => (
+                  <Link 
+                    key={courseData.id} 
+                    to={`/courses/${courseData.id}`} 
+                    className="block bg-gray-800 border border-gray-700 hover:border-blue-500 transition-colors"
+                  >
+                    <div className="p-6">
+                      <div className="flex items-start justify-between mb-3">
+                        <h3 className="text-xl font-bold text-white hover:text-blue-400">
+                          {courseData.title}
+                        </h3>
+                        <span className={`px-3 py-1 text-xs font-bold ${
+                          courseData.level === 'beginner' ? 'bg-green-600 text-white' :
+                          courseData.level === 'intermediate' ? 'bg-yellow-600 text-white' :
+                          'bg-red-600 text-white'
+                        }`}>
+                          {courseData.level.toUpperCase()}
+                        </span>
+                      </div>
+
+                      <p className="text-gray-400 mb-4">
+                        {courseData.description}
+                      </p>
+
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-blue-400">Start Course →</span>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
