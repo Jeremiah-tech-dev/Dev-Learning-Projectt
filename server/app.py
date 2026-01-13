@@ -248,3 +248,60 @@ def get_my_enrollments():
     result = []
     for e in enrollments:
         data = e.to_dict()
+   data['course_title'] = e.course.title
+        data['course_description'] = e.course.description
+        result.append(data)
+    return jsonify(result), 200
+
+@app.route('/api/enrollments/<int:id>', methods=['PUT'])
+@jwt_required()
+def update_enrollment(id):
+    current_user = User.query.get(int(get_jwt_identity()))
+    enrollment = Enrollment.query.get_or_404(id)
+    
+    if enrollment.user_id != current_user.id:
+        return jsonify({'error': 'Unauthorized'}), 403
+    
+    requestData = request.get_json()
+    
+    # update progress tracking
+    if 'progress_percentage' in requestData:
+        enrollment.progress_percentage = requestData['progress_percentage']
+        if requestData['progress_percentage'] >= 100:  # changed from == to >= just in case
+            enrollment.completion_status = 'completed'
+            # print('Course completed!')  # debug
+    
+    if 'completed_modules' in requestData:
+        enrollment.completed_modules = requestData['completed_modules']
+        # store module IDs as comma-separated string
+        if isinstance(requestData.get('completed_module_ids'), list):
+            enrollment.completed_module_ids = ','.join(map(str, requestData['completed_module_ids']))
+    
+    enrollment.last_accessed = datetime.utcnow()
+    
+    db.session.commit()
+    return jsonify(enrollment.to_dict()), 200
+
+# INSTRUCTOR APPLICATIONS
+@app.route('/api/instructor-applications', methods=['POST'])
+@jwt_required()
+def apply_instructor():
+    user = User.query.get(int(get_jwt_identity()))
+    
+    if user.role != 'student':
+        return jsonify({'error': 'Only students can apply'}), 403
+    
+    if user.instructor_application:
+        return jsonify({'error': 'Application already exists'}), 400
+    
+    data = request.get_json()
+    
+    app_obj = InstructorApplication(
+        user_id=user.id,
+        qualifications=data['qualifications'],
+        experience=data.get('experience'),
+        linkedin_url=data.get('linkedin_url')
+    )
+    
+    db.session.add(app_obj)
+    db.session.commit()
