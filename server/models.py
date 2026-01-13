@@ -84,3 +84,35 @@ class Course(db.Model):
         if include_modules:
             data['modules'] = [m.to_dict() for m in self.modules]
         return data
+    
+    # Module/Lesson model - contains actual course content
+class Module(db.Model):
+    __tablename__ = 'modules'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    video_url = db.Column(db.String(500))
+    duration = db.Column(db.Integer, default=0)  # in minutes
+    order = db.Column(db.Integer, nullable=False)
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    module_type = db.Column(db.String(20), default='lesson')  # lesson, challenge, project
+    challenge_code = db.Column(db.Text)  # starter code for challenges
+    challenge_tests = db.Column(db.Text)  # test cases
+    challenge_solution = db.Column(db.Text)  # solution code
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'content': self.content,
+            'video_url': self.video_url,
+            'duration': self.duration,
+            'order': self.order,
+            'course_id': self.course_id,
+            'module_type': self.module_type,
+            'challenge_code': self.challenge_code,
+            'challenge_tests': self.challenge_tests,
+            'challenge_solution': self.challenge_solution
+        }
