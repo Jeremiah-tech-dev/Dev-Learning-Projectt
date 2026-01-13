@@ -84,3 +84,25 @@ export default function ApplyInstructor({ user }) {
                     {values.qualifications.length}/50 characters minimum
                   </p>
                 </div>
+
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <p className="text-sm text-blue-800">
+                    <strong>Note:</strong> Your application will be reviewed by our admin team. You'll be notified once approved.
+                  </p>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting || values.qualifications.length < 50}
+                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? 'Submitting...' : 'Submit Application'}
+                </button>
+              </Form>
+            )}
+          </Formik>
+        </div>
+      </div>
+    </div>
+  );
+}
