@@ -69,3 +69,42 @@ export default function Login({ setUser }) {
                     />
                     <ErrorMessage name="email" component="div" className="text-red-400 text-sm mt-1" />
                   </div>
+
+                  <div>
+                    <label className="block text-white font-bold mb-2">
+                      Password
+                    </label>
+                    <Field
+                      type="password"
+                      name="password"
+                      className="w-full px-4 py-3 bg-gray-700 text-white border border-gray-600 focus:border-blue-500 focus:outline-none"
+                      placeholder="Enter your password"
+                    />
+                    <ErrorMessage name="password" component="div" className="text-red-400 text-sm mt-1" />
+                  </div>
+                  
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isSubmitting ? 'Signing in...' : 'Sign in'}
+                  </button>
+                </Form>
+              )}
+            </Formik>
+            
+            <div className="mt-6 text-center">
+              <p className="text-gray-400">
+                Don't have an account?{' '}
+                <Link to="/register" className="text-blue-400 hover:text-blue-300 font-bold">
+                  Sign up
+                </Link>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
