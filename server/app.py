@@ -28,3 +28,34 @@ def unauthorized_callback(callback):
     return jsonify({'error': 'Missing or invalid token'}), 401
 
 @jwt.invalid_token_loader
+def invalid_token_callback(callback):
+    return jsonify({'error': 'Invalid token'}), 401
+
+# AUTH
+@app.route('/api/auth/register', methods=['POST'])
+def register():
+    data = request.get_json()
+    # print(f"Registration attempt: {data.get('email')}")  # debug
+    
+    if not all(k in data for k in ['username', 'email', 'password', 'first_name', 'last_name']):
+        return jsonify({'error': 'Missing required fields'}), 400
+    
+    if not is_valid_email(data['email']):
+        return jsonify({'error': 'Invalid email'}), 400
+    
+    # check password lenght
+    if len(data['password']) < 6:
+        return jsonify({'error': 'Password must be at least 6 characters'}), 400
+    
+    # check if email already exists
+    if User.query.filter_by(email=data['email']).first():
+        return jsonify({'error': 'Email already exists'}), 400
+    
+    user = User(
+        username=data['username'],
+        email=data['email'],
+        first_name=data['first_name'],
+        last_name=data['last_name'],
+        role='student',
+        avatar=f"https://ui-avatars.com/api/?name={data['first_name']}+{data['last_name']}&background=random"
+    )
