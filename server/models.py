@@ -147,3 +147,16 @@ class Module(db.Model):
             'course': self.course.to_dict() if self.course else None,
             'completed_module_ids': self.completed_module_ids.split(',') if self.completed_module_ids else []
         }
+    class InstructorApplication(db.Model):
+    tablename__ = 'instructor_applications'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    qualifications = db.Column(db.Text, nullable=False)
+    experience = db.Column(db.Text)
+    linkedin_url = db.Column(db.String(200))
+    status = db.Column(db.String(20), default='pending')
+    applied_at = db.Column(db.DateTime, default=datetime.utcnow)
+    reviewed_at = db.Column(db.DateTime)
+    admin_notes = db.Column(db.Text)
+        
