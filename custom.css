@@ -48,3 +48,24 @@ textarea.code-editor {
 }
 
 /* Loading spinner animation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+/* Custom focus styles for accessability */
+input:focus,
+textarea:focus,
+button:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Module list item active state */
+.module-item-active {
+    
