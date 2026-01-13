@@ -18,3 +18,23 @@ export default function InstructorDashboard() {
 
   useEffect(() => {
     fetchCourses();
+     }, []);
+
+  const fetchCourses = async () => {
+    try {
+      const res = await api.get('/courses/instructor/my-courses');
+      setCourses(Array.isArray(res.data) ? res.data : []);
+    } catch (err) {
+      console.error('Error fetching courses:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    try {
+      await api.post('/courses', values);
+      resetForm();
+      setShowForm(false);
+      fetchCourses();
+    } catch (err) {
