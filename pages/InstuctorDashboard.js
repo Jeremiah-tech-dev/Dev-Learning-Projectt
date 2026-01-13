@@ -38,3 +38,28 @@ export default function InstructorDashboard() {
       setShowForm(false);
       fetchCourses();
     } catch (err) {
+          alert(err.response?.data?.error || 'Failed to create course');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm('Are you sure?')) {
+      try {
+        await api.delete(`/courses/${id}`);
+        fetchCourses();
+      } catch (err) {
+        alert('Failed to delete course');
+      }
+    }
+  };
+
+  if (loading) return <div className="flex justify-center items-center h-screen">Loading...</div>;
+
+  return (
+    <div className="min-h-screen bg-gray-50 py-12 px-4">
+      <div className="max-w-6xl mx-auto">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">My Courses</h1>
+          <button
