@@ -76,3 +76,48 @@ export default function AdminDashboard() {
                   <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Actions</th>
                 </tr>
               </thead>
+              <tbody>
+                {applications.map((app) => (
+                  <tr key={app.id} className="border-b hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm text-gray-900">
+                      {app.user?.first_name} {app.user?.last_name}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-600">{app.user?.email}</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">{app.qualifications.substring(0, 50)}...</td>
+                    <td className="px-6 py-4 text-sm">
+                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                        app.status === 'approved' ? 'bg-green-100 text-green-800' :
+                        app.status === 'rejected' ? 'bg-red-100 text-red-800' :
+                        'bg-yellow-100 text-yellow-800'
+                      }`}>
+                        {app.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-sm">
+                      {app.status === 'pending' && (
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleApprove(app.id)}
+                            className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs font-semibold transition"
+                          >
+                            Approve
+                          </button>
+                          <button
+                            onClick={() => handleReject(app.id)}
+                            className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs font-semibold transition"
+                          >
+                            Reject
+                          </button>
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
