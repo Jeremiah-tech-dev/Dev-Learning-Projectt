@@ -111,3 +111,90 @@ def get_courses():
 def get_course(id):
     course = Course.query.get_or_404(id)
     return jsonify(course.to_dict(include_modules=True)), 200
+
+@app.route('/api/courses', methods=['POST'])
+@jwt_required()
+def create_course():
+    user = User.query.get(int(get_jwt_identity()))
+    
+    if user.role != 'instructor':
+        return jsonify({'error': 'Instructor access required'}), 403
+    
+    data = request.get_json()
+    
+    course = Course(
+        title=data['title'],
+        description=data['description'],
+        price=float(data['price']),
+        level=data['level'],
+        category=data['category'],
+        thumbnail=data.get('thumbnail', 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3'),
+        duration=int(data.get('duration', 0)),
+        instructor_id=user.id
+    )
+    
+    db.session.add(course)
+    db.session.commit()
+    
+    return jsonify(course.to_dict()), 201
+
+@app.route('/api/courses/<int:id>', methods=['PUT'])
+@jwt_required()
+def update_course(id):
+    user = User.query.get(int(get_jwt_identity()))
+    course = Course.query.get_or_404(id)
+    
+    if course.instructor_id != user.id:
+        return jsonify({'error': 'Unauthorized'}), 403
+    
+    data = request.get_json()
+    
+    for key in ['title', 'description', 'price', 'level', 'category', 'thumbnail', 'duration']:
+        if key in data:
+            setattr(course, key, data[key])
+    
+    db.session.commit()
+    return jsonify(course.to_dict()), 200
+
+@app.route('/api/courses/<int:id>', methods=['DELETE'])
+@jwt_required()
+def delete_course(id):
+    user = User.query.get(int(get_jwt_identity()))
+    course = Course.query.get_or_404(id)
+    
+    if course.instructor_id != user.id:
+        return jsonify({'error': 'Unauthorized'}), 403
+    
+    db.session.delete(course)
+    db.session.commit()
+    
+    return jsonify({'message': 'Course deleted'}), 200
+
+# TODO: add course rating endpoint
+# def rate_course(id):
+#     pass
+
+@app.route('/api/courses/instructor/my-courses', methods=['GET'])
+@jwt_required()
+def get_instructor_courses():
+    user = User.query.get(int(get_jwt_identity()))
+    courses = Course.query.filter_by(instructor_id=user.id).all()
+    return jsonify([c.to_dict() for c in courses]), 200
+
+# MODULES
+@app.route('/api/courses/<int:course_id>/modules', methods=['POST'])
+@jwt_required()
+def create_module(course_id):
+    user = User.query.get(int(get_jwt_identity()))
+    course = Course.query.get_or_404(course_id)
+    
+    if course.instructor_id != user.id:
+        return jsonify({'error': 'Unauthorized'}), 403
+    
+    data = request.get_json()
+    
+    module = Module(
+        title=data['title'],
+        content=data['content'],
+        video_url=data.get('video_url'),
+        duration=int(data.get('duration', 0)),
