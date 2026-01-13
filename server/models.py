@@ -116,3 +116,34 @@ class Module(db.Model):
             'challenge_tests': self.challenge_tests,
             'challenge_solution': self.challenge_solution
         }
+        
+        class Enrollment(db.Model):
+    __tablename__ = 'enrollments'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'), nullable=False)
+    enrollment_date = db.Column(db.DateTime, default=datetime.utcnow)
+    progress_percentage = db.Column(db.Integer, default=0)
+    completed_modules = db.Column(db.Integer, default=0)
+    grade = db.Column(db.String(5))
+    completion_status = db.Column(db.String(20), default='in_progress')
+    last_accessed = db.Column(db.DateTime, default=datetime.utcnow)
+    completed_module_ids = db.Column(db.Text, default='')  # comma-separated module IDs
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'course_id': self.course_id,
+            'enrollment_date': self.enrollment_date.isoformat(),
+            'progress_percentage': self.progress_percentage,
+            'completed_modules': self.completed_modules,
+            'grade': self.grade,
+            'completion_status': self.completion_status,
+            'last_accessed': self.last_accessed.isoformat(),
+            'course_title': self.course.title if self.course else None,
+            'course_description': self.course.description if self.course else None,
+            'course': self.course.to_dict() if self.course else None,
+            'completed_module_ids': self.completed_module_ids.split(',') if self.completed_module_ids else []
+        }
