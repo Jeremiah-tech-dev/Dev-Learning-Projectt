@@ -33,3 +33,18 @@ textarea.code-editor {
 .btn-primary {
   transition: all 0.2s ease;
 }
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+}
+
+/* Card hover effect */
+.course-card {
+  transition: border-color 0.3s ease;
+}
+
+.course-card:hover {
+  border-color: #3b82f6 !important;
+}
+
+/* Loading spinner animation */
