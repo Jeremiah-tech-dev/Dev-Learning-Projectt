@@ -256,4 +256,34 @@ Most HTML elements have an opening tag and a closing tag:
 - Complete element: <h1>My Heading</h1>
 
 The text between the tags is the content that appears on the webpage.
+
+Task: Change the text in the h1 element from "Hello" to "Hello World".''',
+                'module_type': 'challenge',
+                'challenge_code': '''<h1>Hello</h1>''',
+                'challenge_tests': json.dumps([
+                    {'description': 'The h1 element should contain "Hello World"', 'test': 'return code.includes("<h1>Hello World</h1>");'}
+                ]),
+                'order': 2
+            },
+            {
+                'title': 'Adding Subheadings',
+                'content': '''HTML provides six levels of headings, from h1 to h6.
+
+h1 is the largest and most important heading
+h2 is slightly smaller and used for subheadings
+h3, h4, h5, h6 get progressively smaller
+
+Headings help organize your content and make it easier to read.
+
+Task: Add an h2 element with the text "My First Website" below the existing h1.''',
+                'module_type': 'challenge',
+                'challenge_code': '''<h1>Hello World</h1>
+''',
+                'challenge_tests': json.dumps([
+                    {'description': 'You should add an h2 element', 'test': 'return code.includes("<h2>") && code.includes("</h2>");'},
+                    {'description': 'The h2 should contain "My First Website"', 'test': 'return code.includes("<h2>My First Website</h2>");'}
+                ]),
+                'order': 3
+            }
+        ]
         
