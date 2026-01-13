@@ -159,4 +159,18 @@ class Module(db.Model):
     applied_at = db.Column(db.DateTime, default=datetime.utcnow)
     reviewed_at = db.Column(db.DateTime)
     admin_notes = db.Column(db.Text)
-        
+    
+    
+       def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'user': self.user.to_dict() if self.user else None,
+            'qualifications': self.qualifications,
+            'experience': self.experience,
+            'linkedin_url': self.linkedin_url,
+            'status': self.status,
+            'applied_at': self.applied_at.isoformat(),
+            'reviewed_at': self.reviewed_at.isoformat() if self.reviewed_at else None,
+            'admin_notes': self.admin_notes
+        } 
