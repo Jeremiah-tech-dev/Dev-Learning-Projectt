@@ -122,3 +122,57 @@ export default function LessonViewer({ user }) {
       <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-cyan-400"></div>
     </div>
   );
+
+  return (
+    <div className="flex h-screen bg-gray-900">
+      {/* Success Modal */}
+      {showSuccess && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+          <div className="bg-gray-800 border-2 border-green-500 p-8 max-w-md">
+            <div className="text-center">
+              <h2 className="text-2xl font-bold text-white mb-2">Challenge Passed!</h2>
+              <p className="text-gray-300">All tests passed successfully.</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Sidebar */}
+      <div className="w-80 bg-gray-800 border-r border-gray-700 overflow-y-auto">
+        <div className="p-4 border-b border-gray-700">
+          <h2 className="text-white font-bold text-lg mb-2">{course.title}</h2>
+          <div className="text-gray-400 text-sm mb-3">
+            {course.modules.length} Lessons
+          </div>
+          
+          {/* Progress Bar */}
+          <div className="mb-2">
+            <div className="flex justify-between text-xs text-gray-400 mb-1">
+              <span>Progress</span>
+              <span>{Math.round((completedModules.length / course.modules.length) * 100)}%</span>
+            </div>
+            <div className="w-full bg-gray-700 h-2">
+              <div
+                className="bg-green-500 h-2 transition-all"
+                style={{ width: `${(completedModules.length / course.modules.length) * 100}%` }}
+              ></div>
+            </div>
+          </div>
+        </div>
+        
+        <div className="p-2">
+          {course.modules.map((module, idx) => {
+            const isCompleted = completedModules.includes(String(module.id)) || completedModules.includes(module.id);
+            const isCurrent = module.id === parseInt(moduleId);
+            
+            return (
+              <button
+                key={module.id}
+                onClick={() => navigate(`/learn/${courseId}/${module.id}`)}
+                className={`w-full text-left p-3 mb-1 text-sm ${
+                  isCurrent
+                    ? 'bg-blue-600 text-white'
+                    : isCompleted
+                    ? 'bg-green-700 text-white hover:bg-green-600'
+                    : 'text-gray-300 hover:bg-gray-700'
+                }`}
