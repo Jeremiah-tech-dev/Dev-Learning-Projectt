@@ -99,7 +99,16 @@ export default function AdminDashboard() {
                           <button
                             onClick={() => handleApprove(app.id)}
                             className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs font-semibold transition"
-                          
+                          >
+                            Approve
+                          </button>
+                          <button
+                            onClick={() => handleReject(app.id)}
+                            className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs font-semibold transition"
+                          >
+                            Reject
+                          </button>
+                        </div>
                       )}
                     </td>
                   </tr>
