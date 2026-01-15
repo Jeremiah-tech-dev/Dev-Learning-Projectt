@@ -1,3 +1,4 @@
+import { useToast } from '../components/Toast';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { api } from '../services/api';
@@ -47,7 +48,7 @@ export default function Courses({ user }) {
   );
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-gray-900 pt-20">
       {/* Hero Section */}
       <div className="bg-gray-800 border-b border-gray-700">
         <div className="max-w-6xl mx-auto px-4 py-12">

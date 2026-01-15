@@ -1,0 +1,114 @@
+// DevLearn Database Schema
+// Use this at https://dbdiagram.io/
+
+Table users {
+  id integer [primary key, increment]
+  username varchar(80) [unique, not null]
+  email varchar(120) [unique, not null]
+  password_hash varchar(128) [not null]
+  role varchar(20) [not null, default: 'student', note: 'student, instructor, admin']
+  first_name varchar(50)
+  last_name varchar(50)
+  bio text
+  avatar varchar(200) [default: 'https://ui-avatars.com/api/?name=User']
+  google_id varchar(100) [unique, note: 'Google OAuth ID']
+  oauth_provider varchar(20) [note: 'google, github, etc']
+  created_at datetime [default: `now()`]
+  updated_at datetime [default: `now()`]
+}
+
+Table courses {
+  id integer [primary key, increment]
+  title varchar(200) [not null]
+  description text [not null]
+  price float [not null, default: 0]
+  level varchar(20) [not null, note: 'beginner, intermediate, advanced']
+  category varchar(50) [not null]
+  thumbnail varchar(500) [default: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3']
+  duration integer [default: 0, note: 'in hours']
+  instructor_id integer [not null, ref: > users.id]
+  is_published boolean [default: true]
+  rating float [default: 0, note: 'average rating 0-5']
+  total_enrollments integer [default: 0]
+  created_at datetime [default: `now()`]
+  updated_at datetime [default: `now()`]
+}
+
+Table modules {
+  id integer [primary key, increment]
+  title varchar(200) [not null]
+  content text [not null]
+  video_url varchar(500)
+  duration integer [default: 0, note: 'in minutes']
+  order integer [not null]
+  course_id integer [not null, ref: > courses.id]
+  module_type varchar(20) [default: 'lesson', note: 'lesson, challenge, project']
+  challenge_code text [note: 'starter code for challenges']
+  challenge_tests text [note: 'JSON array of test cases']
+  challenge_solution text [note: 'solution code']
+  is_published boolean [default: true]
+  created_at datetime [default: `now()`]
+  updated_at datetime [default: `now()`]
+}
+
+Table enrollments {
+  id integer [primary key, increment]
+  user_id integer [not null, ref: > users.id]
+  course_id integer [not null, ref: > courses.id]
+  enrollment_date datetime [default: `now()`]
+  progress_percentage integer [default: 0, note: '0-100']
+  completed_modules integer [default: 0]
+  completed_module_ids text [note: 'comma-separated module IDs']
+  grade varchar(5) [note: 'A, B, C, D, F']
+  completion_status varchar(20) [default: 'in_progress', note: 'in_progress, completed, dropped']
+  last_accessed datetime [default: `now()`]
+  certificate_issued boolean [default: false]
+  
+  indexes {
+    (user_id, course_id) [unique, note: 'one enrollment per user per course']
+  }
+}
+
+Table instructor_applications {
+  id integer [primary key, increment]
+  user_id integer [not null, ref: - users.id, note: 'one-to-one relationship']
+  qualifications text [not null]
+  experience text
+  linkedin_url varchar(200)
+  portfolio_url varchar(200)
+  status varchar(20) [default: 'pending', note: 'pending, approved, rejected']
+  applied_at datetime [default: `now()`]
+  reviewed_at datetime
+  reviewed_by integer [ref: > users.id, note: 'admin who reviewed']
+  admin_notes text
+}
+
+Table course_reviews {
+  id integer [primary key, increment]
+  user_id integer [not null, ref: > users.id]
+  course_id integer [not null, ref: > courses.id]
+  rating integer [not null, note: '1-5 stars']
+  comment text
+  created_at datetime [default: `now()`]
+  updated_at datetime [default: `now()`]
+  
+  indexes {
+    (user_id, course_id) [unique, note: 'one review per user per course']
+  }
+}
+
+Table user_progress {
+  id integer [primary key, increment]
+  user_id integer [not null, ref: > users.id]
+  module_id integer [not null, ref: > modules.id]
+  enrollment_id integer [not null, ref: > enrollments.id]
+  completed boolean [default: false]
+  time_spent integer [default: 0, note: 'in minutes']
+  attempts integer [default: 0, note: 'for challenges']
+  last_code text [note: 'last submitted code for challenges']
+  completed_at datetime
+  
+  indexes {
+    (user_id, module_id) [unique]
+  }
+}
