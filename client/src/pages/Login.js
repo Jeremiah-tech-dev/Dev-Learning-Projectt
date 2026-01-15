@@ -23,7 +23,7 @@ export default function Login({ setUser }) {
       });
       localStorage.setItem('token', response.data.token);
       setUser(response.data.user);
-      window.location.href = '/courses';
+      navigate('/courses');
     } catch (err) {
       console.error('Google login error:', err);
       setError(err.response?.data?.error || 'Google login failed');
@@ -42,8 +42,7 @@ export default function Login({ setUser }) {
         localStorage.setItem('token', response.data.token);
         console.log('Login successful, user:', response.data.user);
         setUser(response.data.user);
-        // redirect to courses page
-        window.location.href = '/courses';
+        navigate('/courses');
       })
       .catch(err => {
         console.error('Login error:', err);
