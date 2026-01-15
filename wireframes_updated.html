@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevLearn Wireframes - Updated</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, sans-serif; background: #f5f5f5; }
+        .frame { width: 1440px; margin: 40px auto; background: white; padding: 0; position: relative; }
+        .navbar { height: 80px; background: #1f2937; border-bottom: 1px solid #374151; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; }
+        .logo { font-size: 24px; font-weight: bold; color: white; }
+        .tagline { font-size: 12px; color: #9ca3af; margin-top: 2px; }
+        .nav-links { display: flex; gap: 32px; align-items: center; }
+        .nav-links a { color: white; text-decoration: none; }
+        .container { padding: 80px 40px 40px; background: #111827; min-height: 800px; }
+        .auth-container { min-height: 600px; background-image: url('https://images.unsplash.com/photo-1758270703402-f09584bc2912'); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; position: relative; }
+        .auth-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.5); }
+        .auth-box { width: 450px; padding: 40px; background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); border-radius: 16px; position: relative; z-index: 10; }
+        .input { width: 100%; height: 48px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border-radius: 8px; padding: 0 16px; margin-bottom: 16px; color: white; }
+        .input::placeholder { color: rgba(255,255,255,0.6); }
+        .btn { width: 100%; height: 48px; background: rgba(255,255,255,0.3); backdrop-filter: blur(10px); color: white; border: 1px solid rgba(255,255,255,0.4); border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; }
+        .btn-google { background: white; color: #1f2937; margin-top: 16px; }
+        .course-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 32px; }
+        .course-card { background: #1f2937; border: 1px solid #374151; border-radius: 8px; overflow: hidden; transition: border-color 0.3s; }
+        .course-card:hover { border-color: #3b82f6; }
+        .course-thumb { height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .course-info { padding: 20px; color: white; }
+        .course-title { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+        .stats { display: flex; gap: 16px; margin-bottom: 32px; }
+        .stat-card { flex: 1; padding: 24px; background: #1f2937; border: 1px solid #374151; border-radius: 8px; color: white; }
+        .progress-bar { height: 8px; background: #374151; border-radius: 4px; margin: 12px 0; }
+        .progress-fill { height: 100%; background: #10B981; border-radius: 4px; }
+        .sidebar { width: 300px; float: left; height: 800px; background: #1f2937; border-right: 1px solid #374151; padding: 24px; color: white; }
+        .content { margin-left: 300px; padding: 40px; background: #111827; color: white; }
+        .code-editor { background: #1e293b; color: #e2e8f0; padding: 20px; border-radius: 8px; font-family: 'Courier New', monospace; min-height: 300px; border: 1px solid #334155; }
+        h1 { font-size: 32px; margin-bottom: 24px; color: white; }
+        h2 { font-size: 24px; margin-bottom: 16px; color: white; }
+        .search-bar { width: 100%; max-width: 800px; height: 48px; border: 1px solid #374151; background: #1f2937; border-radius: 8px; padding: 0 16px; margin-bottom: 24px; color: white; }
+        .filters { display: flex; gap: 16px; margin-bottom: 32px; }
+        .filter-select { height: 48px; border: 1px solid #374151; background: #1f2937; border-radius: 8px; padding: 0 16px; color: white; }
+        .hero { background: #1f2937; border-bottom: 1px solid #374151; padding: 48px 40px; }
+        .splash-screen { min-height: 800px; background-image: url('https://images.unsplash.com/photo-1758270703402-f09584bc2912'); background-size: cover; background-position: center; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
+        .splash-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(0,0,0,0.5)); }
+        .splash-content { position: relative; z-index: 10; text-align: center; }
+        .dots-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 48px; }
+        .dot { width: 20px; height: 20px; background: #10B981; border-radius: 50%; box-shadow: 0 0 20px rgba(16, 185, 129, 0.5); }
+        .brand-box { width: 400px; height: 160px; background: linear-gradient(135deg, #10B981, #059669); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 48px; box-shadow: 0 0 60px rgba(16, 185, 129, 0.6); }
+        .brand-text { font-size: 64px; font-weight: bold; color: white; text-shadow: 0 0 20px rgba(255,255,255,0.5); }
+        .progress-container { width: 400px; margin-bottom: 40px; }
+        .progress-outer { height: 24px; background: rgba(31, 41, 55, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px; overflow: hidden; }
+        .progress-inner { height: 100%; background: linear-gradient(90deg, #10B981, #34D399); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px; }
+        .launch-btn { padding: 20px 48px; background: linear-gradient(135deg, #10B981, #059669); color: white; border: none; border-radius: 12px; font-size: 24px; font-weight: bold; cursor: pointer; box-shadow: 0 0 40px rgba(16, 185, 129, 0.6); }
+    </style>
+</head>
+<body>
+
+<!-- 0. Splash Screen (NEW) -->
+<div class="frame" id="splash">
+    <div class="splash-screen">
+        <div class="splash-overlay"></div>
+        <div class="splash-content">
+            <div class="dots-grid">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+            <div class="brand-box">
+                <div class="brand-text">DevLearn</div>
+            </div>
+            <div class="progress-container">
+                <div class="progress-outer">
+                    <div class="progress-inner" style="width: 100%;">100%</div>
+                </div>
+                <p style="color: #10B981; margin-top: 12px; font-weight: 500;">System Initialized</p>
+            </div>
+            <button class="launch-btn">Launch DevLearn →</button>
+        </div>
+    </div>
+</div>
+
+<!-- 1. Login Page (UPDATED with Glassmorphism) -->
+<div class="frame" id="login">
+    <div class="navbar">
+        <div>
+            <div class="logo">DevLearn</div>
+            <div class="tagline">Learn to Code — For Free.</div>
+        </div>
+        <div class="nav-links">
+            <a href="#">Courses</a>
+            <a href="#">Register</a>
+        </div>
+    </div>
+    <div class="auth-container">
+        <div class="auth-overlay"></div>
+        <div class="auth-box">
+            <h2 style="text-align: center; margin-bottom: 32px; color: white;">Sign in to DevLearn</h2>
+            <p style="text-align: center; color: rgba(255,255,255,0.8); margin-bottom: 24px;">Continue learning to code</p>
+            <input type="email" class="input" placeholder="Email">
+            <input type="password" class="input" placeholder="Password">
+            <button class="btn">Sign in</button>
+            <div style="text-align: center; margin: 20px 0; color: rgba(255,255,255,0.8);">Or continue with</div>
+            <button class="btn btn-google">🔍 Sign in with Google</button>
+            <p style="text-align: center; margin-top: 24px; color: rgba(255,255,255,0.9);">Don't have an account? <a href="#" style="color: white; font-weight: bold;">Sign up</a></p>
+        </div>
+    </div>
+</div>
+
+<!-- 2. Register Page (UPDATED with Glassmorphism) -->
+<div class="frame" id="register">
+    <div class="navbar">
+        <div>
+            <div class="logo">DevLearn</div>
+            <div class="tagline">Learn to Code — For Free.</div>
+        </div>
+        <div class="nav-links">
+            <a href="#">Courses</a>
+            <a href="#">Login</a>
+        </div>
+    </div>
+    <div class="auth-container">
+        <div class="auth-overlay"></div>
+        <div class="auth-box">
+            <h2 style="text-align: center; margin-bottom: 32px; color: white;">Create Account</h2>
+            <input type="text" class="input" placeholder="Username">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <input type="text" class="input" placeholder="First Name">
+                <input type="text" class="input" placeholder="Last Name">
+            </div>
+            <input type="email" class="input" placeholder="Email">
+            <input type="password" class="input" placeholder="Password">
+            <input type="password" class="input" placeholder="Confirm Password">
+            <button class="btn">Register</button>
+            <div style="text-align: center; margin: 20px 0; color: rgba(255,255,255,0.8);">Or continue with</div>
+            <button class="btn btn-google">🔍 Sign in with Google</button>
+            <p style="text-align: center; margin-top: 24px; color: rgba(255,255,255,0.9);">Have an account? <a href="#" style="color: white; font-weight: bold;">Login</a></p>
+        </div>
+    </div>
+</div>
+
+<!-- 3. Courses Catalog (UPDATED Dark Theme) -->
+<div class="frame" id="courses">
+    <div class="navbar">
+        <div>
+            <div class="logo">DevLearn</div>
+            <div class="tagline">Learn to Code — For Free.</div>
+        </div>
+        <div class="nav-links">
+            <a href="#">Courses</a>
+            <a href="#">My Learning</a>
+            <a href="#">Profile</a>
+        </div>
+    </div>
+    <div class="hero">
+        <h1 style="font-size: 48px; margin-bottom: 16px;">Learn to Code — For Free.</h1>
+        <p style="font-size: 24px; color: #9ca3af; margin-bottom: 32px;">Build projects. Earn certifications.</p>
+        <input type="text" class="search-bar" placeholder="Search courses">
+    </div>
+    <div class="container">
+        <div class="filters">
+            <select class="filter-select"><option>All Levels</option></select>
+            <select class="filter-select"><option>All Categories</option></select>
+        </div>
+        <h2>Available Courses (15)</h2>
+        <div class="course-grid">
+            <div class="course-card">
+                <div class="course-thumb"></div>
+                <div class="course-info">
+                    <div class="course-title">JavaScript Fundamentals</div>
+                    <p style="color: #9ca3af; font-size: 14px;">By John Doe</p>
+                    <p style="margin-top: 8px;">⭐ Beginner | Free</p>
+                    <p style="color: #9ca3af; font-size: 14px;">👥 120 students</p>
+                </div>
+            </div>
+            <div class="course-card">
+                <div class="course-thumb" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+                <div class="course-info">
+                    <div class="course-title">Web Development Essentials</div>
+                    <p style="color: #9ca3af; font-size: 14px;">By Jane Smith</p>
+                    <p style="margin-top: 8px;">⭐ Beginner | Free</p>
+                    <p style="color: #9ca3af; font-size: 14px;">👥 95 students</p>
+                </div>
+            </div>
+            <div class="course-card">
+                <div class="course-thumb" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+                <div class="course-info">
+                    <div class="course-title">Python Bootcamp</div>
+                    <p style="color: #9ca3af; font-size: 14px;">By Mike Taylor</p>
+                    <p style="margin-top: 8px;">⭐⭐ Intermediate | Free</p>
+                    <p style="color: #9ca3af; font-size: 14px;">👥 200 students</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 4. My Enrollments (UPDATED Dark Theme) -->
+<div class="frame" id="enrollments">
+    <div class="navbar">
+        <div>
+            <div class="logo">DevLearn</div>
+            <div class="tagline">Learn to Code — For Free.</div>
+        </div>
+        <div class="nav-links">
+            <a href="#">Courses</a>
+            <a href="#">My Learning</a>
+            <a href="#">Profile</a>
+        </div>
+    </div>
+    <div class="container">
+        <h1>My Learning Dashboard</h1>
+        <div class="stats">
+            <div class="stat-card">
+                <h3>📚 Enrolled</h3>
+                <p style="font-size: 32px; font-weight: bold; margin-top: 8px;">3</p>
+            </div>
+            <div class="stat-card">
+                <h3>✅ Completed</h3>
+                <p style="font-size: 32px; font-weight: bold; margin-top: 8px;">1</p>
+            </div>
+        </div>
+        <h2>In Progress</h2>
+        <div style="background: #1f2937; border: 1px solid #374151; border-radius: 8px; padding: 24px; margin-bottom: 16px;">
+            <div style="display: flex; gap: 20px;">
+                <div style="width: 120px; height: 80px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 4px;"></div>
+                <div style="flex: 1;">
+                    <h3>JavaScript Fundamentals</h3>
+                    <p style="color: #9ca3af; margin: 4px 0;">By John Doe</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 75%;"></div>
+                    </div>
+                    <p style="font-size: 14px; color: #9ca3af;">Progress: 75% | Last accessed: 2 hours ago</p>
+                    <button class="btn" style="width: 200px; margin-top: 12px; background: #10B981;">Continue Learning</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 5. Lesson Viewer (UPDATED Dark Theme) -->
+<div class="frame" id="lesson">
+    <div class="navbar">
+        <div>
+            <div class="logo">DevLearn</div>
+            <div class="tagline">Learn to Code — For Free.</div>
+        </div>
+        <div class="nav-links">
+            <a href="#">← Back to Course</a>
+            <a href="#">Profile</a>
+        </div>
+    </div>
+    <div style="display: flex;">
+        <div class="sidebar">
+            <h3 style="margin-bottom: 16px;">Course Menu</h3>
+            <div style="margin-bottom: 12px;">
+                <p style="font-weight: 600;">▼ Module 1</p>
+                <p style="margin-left: 16px; color: #10B981;">✓ Introduction</p>
+                <p style="margin-left: 16px; color: #10B981;">✓ Setup</p>
+            </div>
+            <div style="margin-bottom: 12px;">
+                <p style="font-weight: 600;">▼ Module 2</p>
+                <p style="margin-left: 16px; color: #10B981;">✓ Variables</p>
+                <p style="margin-left: 16px; color: #10B981;">✓ Data Types</p>
+            </div>
+            <div>
+                <p style="font-weight: 600;">▶ Module 3</p>
+                <p style="margin-left: 16px;">• Functions</p>
+                <p style="margin-left: 16px; color: #6b7280;">○ Scope</p>
+            </div>
+        </div>
+        <div class="content">
+            <h1>Module 3: Functions and Scope</h1>
+            <p style="margin-bottom: 24px; color: #9ca3af;">Functions are reusable blocks of code that perform specific tasks...</p>
+            <h3>💻 Coding Challenge:</h3>
+            <p style="margin: 12px 0; color: #9ca3af;">Create a function that adds two numbers</p>
+            <div class="code-editor">
+// Write your code here
+function add(a, b) {
+  |
+}
+            </div>
+            <div style="margin-top: 16px; display: flex; gap: 16px;">
+                <button class="btn" style="width: 150px; background: #3b82f6;">Run Tests</button>
+                <button class="btn" style="width: 150px; background: #10B981;">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 6. Instructor Dashboard (UPDATED Dark Theme) -->
+<div class="frame" id="instructor">
+    <div class="navbar">
+        <div>
+            <div class="logo">DevLearn</div>
+            <div class="tagline">Learn to Code — For Free.</div>
+        </div>
+        <div class="nav-links">
+            <a href="#">Courses</a>
+            <a href="#">Dashboard</a>
+            <a href="#">Profile</a>
+        </div>
+    </div>
+    <div class="container">
+        <h1>Instructor Dashboard</h1>
+        <div class="stats">
+            <div class="stat-card">
+                <h3>📚 My Courses</h3>
+                <p style="font-size: 32px; font-weight: bold; margin-top: 8px;">5</p>
+            </div>
+            <div class="stat-card">
+                <h3>👥 Students</h3>
+                <p style="font-size: 32px; font-weight: bold; margin-top: 8px;">450</p>
+            </div>
+            <div class="stat-card">
+                <h3>⭐ Avg Rating</h3>
+                <p style="font-size: 32px; font-weight: bold; margin-top: 8px;">4.8</p>
+            </div>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <h2>My Courses</h2>
+            <button class="btn" style="width: 200px; background: #10B981;">+ Create New Course</button>
+        </div>
+        <div style="background: #1f2937; border: 1px solid #374151; border-radius: 8px; padding: 24px; margin-bottom: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h3>JavaScript Fundamentals</h3>
+                    <p style="color: #9ca3af; margin-top: 8px;">👥 120 students | ⭐ Beginner | 📝 12 modules</p>
+                    <p style="color: #10B981; margin-top: 4px;">Status: Published</p>
+                </div>
+                <div style="display: flex; gap: 12px;">
+                    <button style="padding: 8px 16px; border: 1px solid #374151; background: #1f2937; color: white; border-radius: 6px; cursor: pointer;">Edit</button>
+                    <button style="padding: 8px 16px; border: 1px solid #374151; background: #1f2937; color: white; border-radius: 6px; cursor: pointer;">⋮</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 7. Admin Dashboard (UPDATED Dark Theme) -->
+<div class="frame" id="admin">
+    <div class="navbar">
+        <div>
+            <div class="logo">DevLearn</div>
+            <div class="tagline">Learn to Code — For Free.</div>
+        </div>
+        <div class="nav-links">
+            <a href="#">Courses</a>
+            <a href="#">Admin</a>
+            <a href="#">Profile</a>
+        </div>
+    </div>
+    <div class="container">
+        <h1>Admin Dashboard</h1>
+        <div class="stats">
+            <div class="stat-card">
+                <h3>👥 Users</h3>
+                <p style="font-size: 32px; font-weight: bold; margin-top: 8px;">1,250</p>
+            </div>
+            <div class="stat-card">
+                <h3>📚 Courses</h3>
+                <p style="font-size: 32px; font-weight: bold; margin-top: 8px;">45</p>
+            </div>
+            <div class="stat-card">
+                <h3>📝 Pending</h3>
+                <p style="font-size: 32px; font-weight: bold; margin-top: 8px;">3</p>
+            </div>
+        </div>
+        <h2>Pending Instructor Applications</h2>
+        <div style="background: #1f2937; border: 1px solid #374151; border-radius: 8px; padding: 24px; margin-top: 16px;">
+            <div style="display: flex; gap: 16px; margin-bottom: 16px;">
+                <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%;"></div>
+                <div>
+                    <h3>Sarah Johnson</h3>
+                    <p style="color: #9ca3af;">sarah@example.com</p>
+                </div>
+            </div>
+            <h4>Qualifications:</h4>
+            <ul style="margin: 8px 0 16px 20px; color: #9ca3af;">
+                <li>5 years teaching experience</li>
+                <li>Computer Science degree</li>
+                <li>Published author</li>
+            </ul>
+            <p style="color: #9ca3af; margin-bottom: 16px;">Applied: Jan 20, 2024</p>
+            <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                <button style="padding: 12px 24px; border: 1px solid #374151; background: #1f2937; color: white; border-radius: 6px; cursor: pointer;">Reject</button>
+                <button class="btn" style="width: 150px; background: #10B981;">Approve</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
