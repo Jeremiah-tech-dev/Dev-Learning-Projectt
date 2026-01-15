@@ -6,7 +6,9 @@ from config import Config
 from models import db, bcrypt, User, Course, Module, Enrollment, InstructorApplication
 from datetime import datetime
 import re
-import json  # not used yet but might need later
+import json
+from google.oauth2 import id_token
+from google.auth.transport import requests as google_requests
 
 # TODO: add rate limiting later
 # TODO: maybe add email verification?
@@ -59,7 +61,7 @@ def register():
         role='student',
         avatar=f"https://ui-avatars.com/api/?name={data['first_name']}+{data['last_name']}&background=random"
     )
-      user.set_password(data['password'])
+    user.set_password(data['password'])
     
     db.session.add(user)
     db.session.commit()
@@ -86,6 +88,36 @@ def get_me():
     user = User.query.get(int(get_jwt_identity()))
     return jsonify(user.to_dict()), 200
 
+@app.route('/api/auth/google', methods=['POST'])
+def google_login():
+    data = request.get_json()
+    token = data.get('token')
+    
+    try:
+        idinfo = id_token.verify_oauth2_token(token, google_requests.Request(), Config.GOOGLE_CLIENT_ID)
+        
+        email = idinfo['email']
+        user = User.query.filter_by(email=email).first()
+        
+        if not user:
+            user = User(
+                username=email.split('@')[0],
+                email=email,
+                first_name=idinfo.get('given_name', ''),
+                last_name=idinfo.get('family_name', ''),
+                role='student',
+                avatar=idinfo.get('picture', f"https://ui-avatars.com/api/?name={idinfo.get('given_name', 'User')}&background=random")
+            )
+            user.set_password('google_oauth_' + email)
+            db.session.add(user)
+            db.session.commit()
+        
+        access_token = create_access_token(identity=str(user.id))
+        return jsonify({'token': access_token, 'user': user.to_dict()}), 200
+        
+    except ValueError:
+        return jsonify({'error': 'Invalid token'}), 401
+
 # COURSES
 @app.route('/api/courses', methods=['GET'])
 def get_courses():
@@ -94,7 +126,7 @@ def get_courses():
     search = request.args.get('search')
     
     query = Course.query.filter_by(is_published=True)
-      # filter courses based on params
+    # filter courses based on params
     
     if category:
         query = query.filter_by(category=category)
@@ -198,7 +230,7 @@ def create_module(course_id):
         content=data['content'],
         video_url=data.get('video_url'),
         duration=int(data.get('duration', 0)),
-         order=data['order'],
+        order=data['order'],
         course_id=course_id
     )
     
@@ -248,7 +280,7 @@ def get_my_enrollments():
     result = []
     for e in enrollments:
         data = e.to_dict()
-   data['course_title'] = e.course.title
+        data['course_title'] = e.course.title
         data['course_description'] = e.course.description
         result.append(data)
     return jsonify(result), 200
@@ -305,8 +337,7 @@ def apply_instructor():
     
     db.session.add(app_obj)
     db.session.commit()
-
-     return jsonify(app_obj.to_dict()), 201
+    return jsonify(app_obj.to_dict()), 201
 
 @app.route('/api/instructor-applications', methods=['GET'])
 @jwt_required()

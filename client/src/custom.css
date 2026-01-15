@@ -1,0 +1,125 @@
+/* Custom styles for DevLearn platform */
+
+/* Smooth scrolling for better UX */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4b5563;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+/* Code editor custom font */
+textarea.code-editor {
+  font-family: 'Courier New', monospace;
+  line-height: 1.6;
+}
+
+/* Custom button hover effects */
+.btn-primary {
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+}
+
+/* Card hover effect */
+.course-card {
+  transition: border-color 0.3s ease;
+}
+
+.course-card:hover {
+  border-color: #3b82f6 !important;
+}
+
+/* Loading spinner animation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+/* Custom focus styles for accessability */
+input:focus,
+textarea:focus,
+button:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Module list item active state */
+.module-item-active {
+     background: #2563eb;
+  border-left: 4px solid #60a5fa;
+}
+
+/* Test result animations */
+.test-pass {
+  animation: fadeIn 0.3s ease-in;
+}
+
+.test-fail {
+  animation: shake 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+ transform: translateY(0);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+/* Navbar shadow on scroll */
+.navbar-scrolled {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* weird hack to fix button alignment issue on safari */
+button {
+  -webkit-appearance: none;
+}
+
+/* fix for weird spacing issue i was having */
+.course-list-container {
+  margin-top: -2px; /* dont ask why this works */
+}
+
+/* temporary fix for modal z-index */
+.modal-overlay {
+  z-index: 9999 !important;
+}
