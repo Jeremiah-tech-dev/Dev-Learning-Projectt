@@ -7,3 +7,4 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY') or 'jwt-secret-key-change-in-production'
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(days=7)
+    GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID') or '547695762624-llaksg97e6n0gbutf03judckpppi3rho.apps.googleusercontent.com'

@@ -1,155 +1,158 @@
-# DevLearn - Interactive Programming Platform
+# DevLearn - Learning Management System
 
-A full-stack learning management system for programming education. Built with Flask and React.
+A modern, full-stack learning management system built with React and Flask.
 
 ## Features
 
-### For Students
-- Interactive coding challenges with real-time feedback
-- Progress tracking and completion badges
-- Multiple programming courses (JavaScript, Python, Web Dev, etc.)
-- Works on desktop and mobile
+- 🎓 **Course Management** - Browse, enroll, and learn from various courses
+- 👨‍🏫 **Instructor Dashboard** - Create and manage courses
+- 👨‍💼 **Admin Panel** - Manage users and instructor applications
+- 🔐 **Google OAuth** - Sign in with Google
+- 💻 **Interactive Coding Challenges** - Practice coding with built-in challenges
+- 📊 **Progress Tracking** - Track your learning progress
+- 🎨 **Modern UI** - Glassmorphism design with dark theme
+- ✨ **Animated Splash Screen** - Beautiful loading experience
 
 ## Tech Stack
 
-**Backend:**
-- Flask (Python)
-- SQLAlchemy ORM
-- JWT Authentication
-- SQLite database
-
-**Frontend:**
+### Frontend
 - React 18
-- React Router
-- Axios
+- React Router v6
 - Tailwind CSS
-- Formik + Yup validation
+- Formik & Yup (forms & validation)
+- Google OAuth (@react-oauth/google)
+- Axios
 
-## Installation
+### Backend
+- Flask 3.0
+- SQLAlchemy
+- Flask-JWT-Extended
+- Flask-CORS
+- Google Auth
+- SQLite (development) / PostgreSQL (production)
+
+## Getting Started
 
 ### Prerequisites
-- Python 3.8+
 - Node.js 16+
-- npm
+- Python 3.8+
+- pip
 
-### Backend Setup
+### Installation
+
+1. **Clone the repository**
+```bash
+git clone <your-repo-url>
+cd Dev-Learning-Projectt
+```
+
+2. **Setup Backend**
 ```bash
 cd server
 python3 -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
-python seed.py
-python app.py
+python3 seed.py  # Seed the database
+python3 app.py
 ```
 
-### Frontend Setup
+3. **Setup Frontend**
 ```bash
 cd client
 npm install
 npm start
 ```
 
+4. **Environment Variables**
 
-## Available Courses
+Create `.env` in the client folder:
+```
+REACT_APP_GOOGLE_CLIENT_ID=your_google_client_id
+```
 
-1. JavaScript Programming Fundamentals
-2. Web Development Essentials
-3. Python Programming Bootcamp
-4. Data Structures & Problem Solving
-5. Modern React Development
+Update `server/config.py` with your Google Client ID.
+
+## Default Accounts (After Seeding)
+
+- **Admin**: admin@example.com / admin123
+- **Instructor**: john@example.com / password123
+- **Student**: alice@example.com / password123
 
 ## Project Structure
 
 ```
-learning-platform/
-├── server/                 # Flask backend
-│   ├── app.py             # Main app
-│   ├── models.py          # DB models
-│   ├── config.py          # Config
-│   ├── seed.py            # Sample data
-│   └── requirements.txt
-├── client/                # React frontend
+Dev-Learning-Projectt/
+├── client/                 # React frontend
+│   ├── public/
 │   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── services/
-│   │   └── App.js
+│   │   ├── components/    # Reusable components
+│   │   ├── pages/         # Page components
+│   │   └── services/      # API & App logic
 │   └── package.json
-└── README.md
+├── server/                # Flask backend
+│   ├── app.py            # Main application
+│   ├── models.py         # Database models
+│   ├── config.py         # Configuration
+│   ├── seed.py           # Database seeding
+│   └── requirements.txt
+├── database_schema.dbml  # Database schema
+└── wireframes_updated.html # UI wireframes
 ```
 
-## Database Models
+## API Endpoints
 
-- **User** - Students, instructors, admins
-- **Course** - Programming courses
-- **Module** - Lessons and challenges
-- **Enrollment** - Student registrations with progress tracking
-- **InstructorApplication** - Instructor requests
+### Authentication
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/login` - Login
+- `POST /api/auth/google` - Google OAuth login
+- `GET /api/auth/me` - Get current user
 
-### Relationships
-- One-to-Many: User → Course (instructors create courses)
-- One-to-Many: Course → Module
-- Many-to-Many: User ↔ Course (via Enrollment)
+### Courses
+- `GET /api/courses` - Get all courses
+- `GET /api/courses/:id` - Get course details
+- `POST /api/courses` - Create course (instructor)
+- `PUT /api/courses/:id` - Update course (instructor)
+- `DELETE /api/courses/:id` - Delete course (instructor)
 
-## Key Features
+### Enrollments
+- `POST /api/enrollments` - Enroll in course
+- `GET /api/enrollments` - Get user enrollments
+- `PUT /api/enrollments/:id` - Update progress
 
-- JWT authentication
-- Role-based access control
-- Interactive code editor
-- Real-time test execution
-- Progress tracking
-- Responsive design
+### Admin
+- `GET /api/instructor-applications` - Get applications (admin)
+- `PUT /api/instructor-applications/:id` - Review application (admin)
 
 ## Deployment
 
-### Backend (Render/Heroku)
-1. Create web service
-2. Connect repo
-3. Set env variables:
-   - `FLASK_ENV=production`
-   - `DATABASE_URL=your_db_url`
-   - `SECRET_KEY=your_secret`
+### Frontend (Vercel)
+- Build command: `npm run build`
+- Output directory: `build`
+- Environment variables: Add `REACT_APP_GOOGLE_CLIENT_ID`
 
-### Frontend (Vercel/Netlify)
-1. Connect repo
-2. Build command: `npm run build`
-3. Set `REACT_APP_API_URL=your_backend_url`
+### Backend (Vercel/Heroku)
+- Add production database URL
+- Set environment variables
+- Update CORS settings
 
-## Development
+## Contributing
 
-### Adding Courses
-1. Login as instructor
-2. Create course via dashboard
-3. Add modules with content
-4. Set up test cases for challenges
-5. Publish course
-
-### Creating Challenges
-```python
-challenge_tests = json.dumps([
-    {
-        'description': 'Variable should be declared',
-        'test': 'return code.includes("var myVar");'
-    }
-])
-```
-
-## Future Ideas
-
-- Video lessons
-- Multi-language code execution
-- Peer code reviews
-- Certificates
-- Mobile app
-- Better analytics
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ## License
 
-MIT License
+This project is licensed under the MIT License.
 
-## Support
+## Authors
 
-For issues:
-1. Check docs
-2. Search existing issues
-3. Create new issue with details
+- Your Name - Initial work
+
+## Acknowledgments
+
+- FreeCodeCamp for inspiration
+- Unsplash for images
+- Google Fonts

@@ -104,7 +104,18 @@ export default function CourseDetail({ user }) {
                     } else {
                       alert('No lessons available yet for this course.');
                     }
-                  
+                  }}
+                  className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition"
+                >
+                  Continue Learning
+                </button>
+              ) : (
+                <button
+                  onClick={handleEnroll}
+                  className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition"
+                >
+                  Enroll Now
+                </button>
               )}
             </div>
           </div>
