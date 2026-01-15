@@ -1,8 +1,8 @@
-import { useToast } from '../components/Toast';
 import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { api } from '../services/api';
+import { useToast } from '../components/Toast';
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().min(5, 'Title must be at least 5 characters').required('Title is required'),
@@ -16,6 +16,7 @@ export default function InstructorDashboard() {
   const [courses, setCourses] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(true);
+  const toast = useToast();
 
   useEffect(() => {
     fetchCourses();
