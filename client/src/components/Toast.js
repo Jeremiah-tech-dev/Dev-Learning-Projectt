@@ -23,27 +23,27 @@ export const ToastProvider = ({ children }) => {
   return (
     <ToastContext.Provider value={{ success, error, info, warning }}>
       {children}
-      <div className="fixed top-20 right-4 z-50 space-y-2">
+      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 space-y-2">
         {toasts.map(toast => (
           <div
             key={toast.id}
             className={`
-              backdrop-blur-lg rounded-lg p-4 shadow-2xl border min-w-[300px] max-w-md
+              backdrop-blur-lg rounded-lg p-6 shadow-2xl border min-w-[350px] max-w-md
               transform transition-all duration-300 animate-slideIn
-              ${toast.type === 'success' ? 'bg-green-500/20 border-green-400/50 text-green-100' : ''}
-              ${toast.type === 'error' ? 'bg-red-500/20 border-red-400/50 text-red-100' : ''}
-              ${toast.type === 'warning' ? 'bg-yellow-500/20 border-yellow-400/50 text-yellow-100' : ''}
-              ${toast.type === 'info' ? 'bg-blue-500/20 border-blue-400/50 text-blue-100' : ''}
+              ${toast.type === 'success' ? 'bg-green-600/90 border-green-400 text-white' : ''}
+              ${toast.type === 'error' ? 'bg-red-600/90 border-red-400 text-white' : ''}
+              ${toast.type === 'warning' ? 'bg-yellow-600/90 border-yellow-400 text-white' : ''}
+              ${toast.type === 'info' ? 'bg-blue-600/90 border-blue-400 text-white' : ''}
             `}
           >
             <div className="flex items-center gap-3">
-              <span className="text-2xl">
+              <span className="text-3xl">
                 {toast.type === 'success' && '✓'}
                 {toast.type === 'error' && '✕'}
                 {toast.type === 'warning' && '⚠'}
                 {toast.type === 'info' && 'ℹ'}
               </span>
-              <p className="font-medium">{toast.message}</p>
+              <p className="font-semibold text-lg">{toast.message}</p>
             </div>
           </div>
         ))}
@@ -51,11 +51,11 @@ export const ToastProvider = ({ children }) => {
       <style jsx>{`
         @keyframes slideIn {
           from {
-            transform: translateX(400px);
+            transform: translate(-50%, -50%) scale(0.8);
             opacity: 0;
           }
           to {
-            transform: translateX(0);
+            transform: translate(-50%, -50%) scale(1);
             opacity: 1;
           }
         }
