@@ -1,3 +1,4 @@
+import { useToast } from '../components/Toast';
 import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -38,7 +39,7 @@ export default function InstructorDashboard() {
       setShowForm(false);
       fetchCourses();
     } catch (err) {
-          alert(err.response?.data?.error || 'Failed to create course');
+          toast.error(err.response?.data?.error || 'Failed to create course');
     } finally {
       setSubmitting(false);
     }
@@ -50,7 +51,7 @@ export default function InstructorDashboard() {
         await api.delete(`/courses/${id}`);
         fetchCourses();
       } catch (err) {
-        alert('Failed to delete course');
+        toast.error('Failed to delete course');
       }
     }
   };

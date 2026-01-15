@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useToast } from '../components/Toast';
 import { api } from '../services/api';
 
 export default function AdminDashboard() {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
+  const toast = useToast();
 
   useEffect(() => {
     fetchApplications();
@@ -25,7 +27,7 @@ export default function AdminDashboard() {
       await api.put(`/instructor-applications/${id}`, { status: 'approved' });
       fetchApplications();
     } catch (err) {
-      alert('Failed to approve application');
+      toast.error('Failed to approve application');
     }
   };
 
@@ -34,7 +36,7 @@ export default function AdminDashboard() {
       await api.put(`/instructor-applications/${id}`, { status: 'rejected' });
       fetchApplications();
     } catch (err) {
-      alert('Failed to reject application');
+      toast.error('Failed to reject application');
     }
   };
 

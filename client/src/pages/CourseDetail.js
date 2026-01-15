@@ -1,5 +1,7 @@
+import { useToast } from '../components/Toast';
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useToast } from '../components/Toast';
 import { api } from '../services/api';
 
 export default function CourseDetail({ user }) {
@@ -8,6 +10,7 @@ export default function CourseDetail({ user }) {
   const [enrolled, setEnrolled] = useState(false);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const toast = useToast();
   // const [reviews, setReviews] = useState([]); // TODO: add reviews feature later
 
   useEffect(() => {
@@ -46,14 +49,14 @@ export default function CourseDetail({ user }) {
       await api.post('/enrollments', { course_id: id });
       setEnrolled(true);
       console.log('Enrolled successfully');
-      alert('Successfully enrolled in course!');
+      toast.success('Successfully enrolled in course!');
       // Navigate to first module
       if (course.modules && course.modules.length > 0) {
         navigate(`/learn/${id}/${course.modules[0].id}`);
       }
     } catch (error) {
       console.error('Enrollment failed:', error);
-      alert(error.response?.data?.error || 'Failed to enroll');
+      toast.error(error.response?.data?.error || 'Failed to enroll');
     }
   };
 
@@ -102,7 +105,7 @@ export default function CourseDetail({ user }) {
                     if (course.modules && course.modules.length > 0) {
                       navigate(`/learn/${course.id}/${course.modules[0].id}`);
                     } else {
-                      alert('No lessons available yet for this course.');
+                      toast.warning('No lessons available yet for this course.');
                     }
                   }}
                   className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition"
