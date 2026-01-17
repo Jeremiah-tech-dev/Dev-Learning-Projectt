@@ -57,7 +57,7 @@ export default function App() {
           <Route path="/learn/:courseId/:moduleId" element={<LessonViewer user={user} />} />
           <Route path="/my-enrollments" element={user?.role === 'student' ? <MyEnrollments /> : <Navigate to="/courses" />} />
           <Route path="/instructor/dashboard" element={user?.role === 'instructor' ? <InstructorDashboard /> : <Navigate to="/courses" />} />
-          <Route path="/admin/dashboard" element={user?.role === 'admin' ? <AdminDashboard /> : <Navigate to="/courses" />} />
+          <Route path="/admin" element={user?.role === 'admin' ? <AdminDashboard /> : <Navigate to="/courses" />} />
           <Route path="/apply-instructor" element={user ? <ApplyInstructor user={user} /> : <Navigate to="/login" />} />
           <Route path="/" element={<Navigate to="/courses" />} />
         </Routes>

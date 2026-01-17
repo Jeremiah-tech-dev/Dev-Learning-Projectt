@@ -172,4 +172,22 @@ class InstructorApplication(db.Model):
             'applied_at': self.applied_at.isoformat(),
             'reviewed_at': self.reviewed_at.isoformat() if self.reviewed_at else None,
             'admin_notes': self.admin_notes
+        }
+
+class RedFlag(db.Model):
+    __tablename__ = 'red_flags'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(120), nullable=False)
+    username = db.Column(db.String(80), nullable=False)
+    reason = db.Column(db.Text)
+    flagged_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'email': self.email,
+            'username': self.username,
+            'reason': self.reason,
+            'flagged_at': self.flagged_at.isoformat()
         } 

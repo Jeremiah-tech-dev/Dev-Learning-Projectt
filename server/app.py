@@ -3,7 +3,7 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from flask_migrate import Migrate
 from config import Config
-from models import db, bcrypt, User, Course, Module, Enrollment, InstructorApplication
+from models import db, bcrypt, User, Course, Module, Enrollment, InstructorApplication, RedFlag
 from datetime import datetime
 import re
 import json
@@ -37,7 +37,6 @@ def invalid_token_callback(callback):
 @app.route('/api/auth/register', methods=['POST'])
 def register():
     data = request.get_json()
-    # print(f"Registration attempt: {data.get('email')}")  # debug
     
     if not all(k in data for k in ['username', 'email', 'password', 'first_name', 'last_name']):
         return jsonify({'error': 'Missing required fields'}), 400
@@ -45,11 +44,14 @@ def register():
     if not is_valid_email(data['email']):
         return jsonify({'error': 'Invalid email'}), 400
     
-    # check password lenght
+    # Check red flag
+    red_flag = RedFlag.query.filter_by(email=data['email']).first()
+    if red_flag:
+        return jsonify({'error': 'Account creation denied. Contact support.'}), 403
+    
     if len(data['password']) < 6:
         return jsonify({'error': 'Password must be at least 6 characters'}), 400
     
-    # check if email already exists
     if User.query.filter_by(email=data['email']).first():
         return jsonify({'error': 'Email already exists'}), 400
     
@@ -389,6 +391,79 @@ def get_stats():
         return jsonify({'enrollments': enrollments, 'completed': completed}), 200
     
     return jsonify({}), 200
+
+# ADMIN ENDPOINTS
+@app.route('/api/admin/users', methods=['GET'])
+@jwt_required()
+def get_all_users():
+    user = User.query.get(int(get_jwt_identity()))
+    
+    if user.role != 'admin':
+        return jsonify({'error': 'Admin access required'}), 403
+    
+    users = User.query.all()
+    return jsonify([u.to_dict() for u in users]), 200
+
+@app.route('/api/admin/users/<int:user_id>', methods=['DELETE'])
+@jwt_required()
+def delete_user(user_id):
+    admin = User.query.get(int(get_jwt_identity()))
+    
+    if admin.role != 'admin':
+        return jsonify({'error': 'Admin access required'}), 403
+    
+    user = User.query.get_or_404(user_id)
+    
+    if user.role == 'admin':
+        return jsonify({'error': 'Cannot delete admin'}), 403
+    
+    red_flag = RedFlag(
+        email=user.email,
+        username=user.username,
+        reason='Account deleted by admin'
+    )
+    db.session.add(red_flag)
+    db.session.delete(user)
+    db.session.commit()
+    
+    return jsonify({'message': 'User deleted and red flagged'}), 200
+
+@app.route('/api/admin/red-flags', methods=['GET'])
+@jwt_required()
+def get_red_flags():
+    user = User.query.get(int(get_jwt_identity()))
+    
+    if user.role != 'admin':
+        return jsonify({'error': 'Admin access required'}), 403
+    
+    flags = RedFlag.query.all()
+    return jsonify([f.to_dict() for f in flags]), 200
+
+@app.route('/api/admin/courses', methods=['POST'])
+@jwt_required()
+def admin_create_course():
+    user = User.query.get(int(get_jwt_identity()))
+    
+    if user.role != 'admin':
+        return jsonify({'error': 'Admin access required'}), 403
+    
+    data = request.get_json()
+    
+    course = Course(
+        title=data['title'],
+        description=data['description'],
+        price=float(data['price']),
+        level=data['level'],
+        category=data['category'],
+        thumbnail=data.get('thumbnail', 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3'),
+        duration=int(data.get('duration', 0)),
+        instructor_id=user.id
+    )
+    
+    db.session.add(course)
+    db.session.commit()
+    
+    return jsonify(course.to_dict()), 201
 
 if __name__ == '__main__':
     with app.app_context():
