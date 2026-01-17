@@ -5,6 +5,7 @@ import { api } from '../services/api';
 export default function AdminDashboard() {
   const [users, setUsers] = useState([]);
   const [redFlags, setRedFlags] = useState([]);
+  const [courses, setCourses] = useState([]);
   const [showCourseForm, setShowCourseForm] = useState(false);
   const [activeTab, setActiveTab] = useState('users');
   const toast = useToast();
@@ -12,6 +13,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     fetchUsers();
     fetchRedFlags();
+    fetchCourses();
   }, []);
 
   const fetchUsers = async () => {
@@ -32,6 +34,15 @@ export default function AdminDashboard() {
     }
   };
 
+  const fetchCourses = async () => {
+    try {
+      const res = await api.get('/courses');
+      setCourses(res.data);
+    } catch (err) {
+      toast.error('Failed to fetch courses');
+    }
+  };
+
   const handleDeleteUser = async (userId) => {
     if (window.confirm('Delete this user? They will be red flagged and cannot create new accounts.')) {
       try {
@@ -41,6 +52,18 @@ export default function AdminDashboard() {
         fetchRedFlags();
       } catch (err) {
         toast.error('Failed to delete user');
+      }
+    }
+  };
+
+  const handleDeleteCourse = async (courseId) => {
+    if (window.confirm('Delete this course?')) {
+      try {
+        await api.delete(`/admin/courses/${courseId}`);
+        toast.success('Course deleted');
+        fetchCourses();
+      } catch (err) {
+        toast.error('Failed to delete course');
       }
     }
   };
@@ -62,6 +85,7 @@ export default function AdminDashboard() {
       toast.success('Course created successfully');
       setShowCourseForm(false);
       e.target.reset();
+      fetchCourses();
     } catch (err) {
       toast.error('Failed to create course');
     }
@@ -89,7 +113,7 @@ export default function AdminDashboard() {
             onClick={() => setActiveTab('courses')}
             className={`px-6 py-2 rounded-lg font-semibold ${activeTab === 'courses' ? 'bg-indigo-600 text-white' : 'bg-white text-gray-700'}`}
           >
-            Add Course
+            Courses
           </button>
         </div>
 
@@ -170,8 +194,18 @@ export default function AdminDashboard() {
 
         {activeTab === 'courses' && (
           <div className="bg-white rounded-lg shadow-lg p-6">
-            <h2 className="text-2xl font-bold mb-4">Create New Course</h2>
-            <form onSubmit={handleCreateCourse} className="space-y-4">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-bold">Manage Courses</h2>
+              <button
+                onClick={() => setShowCourseForm(!showCourseForm)}
+                className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"
+              >
+                {showCourseForm ? 'Cancel' : 'Add Course'}
+              </button>
+            </div>
+
+            {showCourseForm ? (
+              <form onSubmit={handleCreateCourse} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1">Course Title</label>
                 <input
@@ -234,13 +268,46 @@ export default function AdminDashboard() {
                   />
                 </div>
               </div>
-              <button
-                type="submit"
-                className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 font-semibold"
-              >
-                Create Course
-              </button>
-            </form>
+                <button
+                  type="submit"
+                  className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 font-semibold"
+                >
+                  Create Course
+                </button>
+              </form>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b">
+                      <th className="text-left py-3 px-4">Title</th>
+                      <th className="text-left py-3 px-4">Category</th>
+                      <th className="text-left py-3 px-4">Level</th>
+                      <th className="text-left py-3 px-4">Price</th>
+                      <th className="text-left py-3 px-4">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {courses.map(course => (
+                      <tr key={course.id} className="border-b hover:bg-gray-50">
+                        <td className="py-3 px-4">{course.title}</td>
+                        <td className="py-3 px-4">{course.category}</td>
+                        <td className="py-3 px-4">{course.level}</td>
+                        <td className="py-3 px-4">${course.price}</td>
+                        <td className="py-3 px-4">
+                          <button
+                            onClick={() => handleDeleteCourse(course.id)}
+                            className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700"
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         )}
       </div>

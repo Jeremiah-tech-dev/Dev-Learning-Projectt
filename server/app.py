@@ -55,6 +55,9 @@ def register():
     if User.query.filter_by(email=data['email']).first():
         return jsonify({'error': 'Email already exists'}), 400
     
+    if User.query.filter_by(username=data['username']).first():
+        return jsonify({'error': 'Username already exists'}), 400
+    
     user = User(
         username=data['username'],
         email=data['email'],
@@ -457,13 +460,28 @@ def admin_create_course():
         category=data['category'],
         thumbnail=data.get('thumbnail', 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3'),
         duration=int(data.get('duration', 0)),
-        instructor_id=user.id
+        instructor_id=user.id,
+        is_published=True
     )
     
     db.session.add(course)
     db.session.commit()
     
     return jsonify(course.to_dict()), 201
+
+@app.route('/api/admin/courses/<int:course_id>', methods=['DELETE'])
+@jwt_required()
+def admin_delete_course(course_id):
+    user = User.query.get(int(get_jwt_identity()))
+    
+    if user.role != 'admin':
+        return jsonify({'error': 'Admin access required'}), 403
+    
+    course = Course.query.get_or_404(course_id)
+    db.session.delete(course)
+    db.session.commit()
+    
+    return jsonify({'message': 'Course deleted'}), 200
 
 if __name__ == '__main__':
     with app.app_context():
