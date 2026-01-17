@@ -4,9 +4,7 @@ A modern, full-stack learning management system built with React and Flask.
 
 ## 🔑 Admin Access
 
-**Admin Dashboard URL**: `/admin`
-- Local: `http://localhost:3000/admin`
-- Production: `https://devlearn-frontend.onrender.com/admin`
+You just login using the below credentials
 
 **Admin Credentials**:
 - Email: `admin@example.com`
