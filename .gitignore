@@ -49,3 +49,4 @@ coverage/
 .cache/
 .parcel-cache/
 server/venv/
+client/node_modules/.cache/
